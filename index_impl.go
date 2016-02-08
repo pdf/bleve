@@ -271,6 +271,24 @@ func (i *indexImpl) Index(id string, data interface{}) (err error) {
 		return ErrorEmptyID
 	}
 
+	doc := document.NewDocument(id)
+	docType := i.m.determineType(doc)
+	return i.IndexType(docType, id, data)
+}
+
+// IndexType indexes object with the specified identifier,
+// using the specified document type.
+// The IndexMapping for this index will determine
+// how the object is indexed.
+func (i *indexImpl) IndexType(docType, id string, data interface{}) (err error) {
+	if docType == "" {
+		return ErrorUnknownIndexType
+	}
+
+	if id == "" {
+		return ErrorEmptyID
+	}
+
 	i.mutex.RLock()
 	defer i.mutex.RUnlock()
 
@@ -279,7 +297,7 @@ func (i *indexImpl) Index(id string, data interface{}) (err error) {
 	}
 
 	doc := document.NewDocument(id)
-	err = i.m.mapDocument(doc, data)
+	err = i.m.mapDocument(docType, doc, data)
 	if err != nil {
 		return
 	}

@@ -34,7 +34,22 @@ func (b *Batch) Index(id string, data interface{}) error {
 		return ErrorEmptyID
 	}
 	doc := document.NewDocument(id)
-	err := b.index.Mapping().mapDocument(doc, data)
+	docType := b.index.Mapping().determineType(doc)
+	return b.IndexType(docType, id, data)
+}
+
+// IndexType adds the specified index operation to the
+// batch, with the specified mapping.  NOTE: the bleve
+// Index is not updated until the batch is executed.
+func (b *Batch) IndexType(docType, id string, data interface{}) error {
+	if docType == "" {
+		return ErrorUnknownIndexType
+	}
+	if id == "" {
+		return ErrorEmptyID
+	}
+	doc := document.NewDocument(id)
+	err := b.index.Mapping().mapDocument(docType, doc, data)
 	if err != nil {
 		return err
 	}
@@ -155,6 +170,7 @@ type Index interface {
 	// requests. See Index interface documentation for details about mapping
 	// rules.
 	Index(id string, data interface{}) error
+	IndexType(docType, id string, data interface{}) error
 	Delete(id string) error
 
 	NewBatch() *Batch

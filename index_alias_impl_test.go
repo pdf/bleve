@@ -699,6 +699,10 @@ func (i *stubIndex) Index(id string, data interface{}) error {
 	return i.err
 }
 
+func (i *stubIndex) IndexType(docType, id string, data interface{}) error {
+	return i.err
+}
+
 func (i *stubIndex) Delete(id string) error {
 	return i.err
 }

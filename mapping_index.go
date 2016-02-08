@@ -377,7 +377,7 @@ func (im *IndexMapping) determineType(data interface{}) string {
 	return im.DefaultType
 }
 
-func (im *IndexMapping) mapDocument(doc *document.Document, data interface{}) error {
+func (im *IndexMapping) mapDocument(docType string, doc *document.Document, data interface{}) error {
 	// see if the top level object is a byte array, and possibly run through a converter
 	byteArrayData, ok := data.([]byte)
 	if ok {
@@ -398,7 +398,6 @@ func (im *IndexMapping) mapDocument(doc *document.Document, data interface{}) er
 		}
 	}
 
-	docType := im.determineType(data)
 	docMapping := im.mappingForType(docType)
 	walkContext := im.newWalkContext(doc, docMapping)
 	if docMapping.Enabled {

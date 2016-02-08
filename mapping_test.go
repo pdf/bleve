@@ -88,7 +88,8 @@ func TestMappingStructWithJSONTags(t *testing.T) {
 	}
 
 	doc := document.NewDocument("1")
-	err := mapping.mapDocument(doc, x)
+	docType := mapping.determineType(doc)
+	err := mapping.mapDocument(docType, doc, x)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -128,7 +129,8 @@ func TestMappingStructWithJSONTagsOneDisabled(t *testing.T) {
 	}
 
 	doc := document.NewDocument("1")
-	err := mapping.mapDocument(doc, x)
+	docType := mapping.determineType(doc)
+	err := mapping.mapDocument(docType, doc, x)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -168,7 +170,8 @@ func TestMappingStructWithPointerToString(t *testing.T) {
 	}
 
 	doc := document.NewDocument("1")
-	err := mapping.mapDocument(doc, x)
+	docType := mapping.determineType(doc)
+	err := mapping.mapDocument(docType, doc, x)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -200,7 +203,8 @@ func TestMappingJSONWithNull(t *testing.T) {
 	}
 
 	doc := document.NewDocument("1")
-	err = mapping.mapDocument(doc, jsondoc)
+	docType := mapping.determineType(doc)
+	err = mapping.mapDocument(docType, doc, jsondoc)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -333,7 +337,8 @@ func TestEnablingDisablingStoringDynamicFields(t *testing.T) {
 	}
 	doc := document.NewDocument("x")
 	mapping := NewIndexMapping()
-	err := mapping.mapDocument(doc, data)
+	docType := mapping.determineType(doc)
+	err := mapping.mapDocument(docType, doc, data)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -349,7 +354,8 @@ func TestEnablingDisablingStoringDynamicFields(t *testing.T) {
 	}()
 
 	doc = document.NewDocument("y")
-	err = mapping.mapDocument(doc, data)
+	docType = mapping.determineType(doc)
+	err = mapping.mapDocument(docType, doc, data)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -377,7 +383,8 @@ func TestMappingBool(t *testing.T) {
 	}
 
 	doc := document.NewDocument("1")
-	err := mapping.mapDocument(doc, x)
+	docType := mapping.determineType(doc)
+	err := mapping.mapDocument(docType, doc, x)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -413,7 +420,8 @@ func TestDisableDefaultMapping(t *testing.T) {
 	}
 
 	doc := document.NewDocument("x")
-	err := indexMapping.mapDocument(doc, data)
+	docType := indexMapping.determineType(doc)
+	err := indexMapping.mapDocument(docType, doc, data)
 	if err != nil {
 		t.Error(err)
 	}
